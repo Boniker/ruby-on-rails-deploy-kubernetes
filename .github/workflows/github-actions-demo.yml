@@ -27,7 +27,7 @@ jobs:
           bundle install
 
       - name: Run linters
-        if: always()
+        continue-on-error: true
         run: |
           rubocop --parallel
 
