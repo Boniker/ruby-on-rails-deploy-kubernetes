@@ -7,6 +7,7 @@ end
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem 'bundler', '1.17.2'
 gem 'rails', '~> 6.0'
 # Use sqlite3 as the database for Active Record
 gem 'pg', '~> 0.20'
@@ -29,7 +30,6 @@ gem 'jbuilder', '~> 2.5'
 # Tests
 gem 'actionpack', '~> 6.0.3'
 gem 'bundler-audit'
-gem 'bundler', '1.17.2'
 gem 'brakeman'
 gem 'rubocop'
 
