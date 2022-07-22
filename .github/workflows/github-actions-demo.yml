@@ -24,6 +24,8 @@ jobs:
       - name: Install packages
         run: |
           gem install rubocop
+          ls
+          cd ./application
           bundle install
 
       - name: Run linters
