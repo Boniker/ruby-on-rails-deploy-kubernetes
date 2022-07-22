@@ -35,7 +35,7 @@ jobs:
       - name: Install packages
         run: |
           gem install rubocop
-          gem install stylelint
+          gem install statelint
           gem install prettier
           gem install eslint
           yarn install --pure-lockfile
@@ -43,7 +43,7 @@ jobs:
       - name: Run linters
         run: |
           bin/rubocop --parallel
-          bin/stylelint
+          bin/statelint
           bin/prettier
           bin/eslint
 
