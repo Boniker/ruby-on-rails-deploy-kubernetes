@@ -34,6 +34,10 @@ jobs:
 
       - name: Install packages
         run: |
+          gem install rubocop
+          gem install stylelint
+          gem install prettier
+          gem install eslint
           yarn install --pure-lockfile
 
       - name: Run linters
