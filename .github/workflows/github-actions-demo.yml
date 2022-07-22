@@ -12,6 +12,7 @@ jobs:
       - name: Setup Ruby and install gems
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: skip
           bundler-cache: true
 
       - name: Setup Node
