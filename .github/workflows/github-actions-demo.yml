@@ -5,7 +5,7 @@ jobs:
   linters:
     name: Linters
     runs-on: ubuntu-latest
-    allow-failure: true
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
