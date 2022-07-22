@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   linters:
-    name: Linters
+    name: Linters Ruby App
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,10 +18,6 @@ jobs:
       - name: Install packages
         working-directory: ./application
         run: |
-          gem install bundler -v 1.17.2
-          gem install bundler-audit
-          gem install brakeman
-          gem install rubocop
           bundle install
 
       - name: Run linters
@@ -36,7 +32,7 @@ jobs:
           brakeman -q -w2
 
   push_to_registry:
-    name: Push Docker image to Docker Hub
+    name: Push Docker image
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -61,3 +57,15 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  trigger_jenkins:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: trigger single Job
+      uses: appleboy/jenkins-action@master
+      with:
+        url: "http://a53a9930b828e40e59206da7b76ade5d-1402368957.eu-central-1.elb.amazonaws.com/"
+        user: "user"
+        token: ${{ secrets.JENKINS_TOKEN }}
+        job: "deploy-ruby-on-rails"
