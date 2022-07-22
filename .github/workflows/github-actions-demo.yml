@@ -24,10 +24,11 @@ jobs:
       - name: Install packages
         run: |
           gem install rubocop
+          bundle install
 
       - name: Run linters
         run: |
-          bin/rubocop --parallel
+          rubocop --parallel
 
       - name: Run security checks
         run: |
