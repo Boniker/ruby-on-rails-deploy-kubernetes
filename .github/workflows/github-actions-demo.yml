@@ -61,6 +61,7 @@ jobs:
   trigger_jenkins:
     name: Deploy to Kubernetes
     runs-on: ubuntu-latest
+    needs: [linters, push_to_registry]
     steps:
     - name: trigger single Job
       uses: appleboy/jenkins-action@master
