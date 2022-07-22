@@ -1,0 +1,18 @@
+#-----------------
+# Statefulset
+#-----------------
+global:
+  postgresql:
+    auth:
+      username: postgres
+      database: postgres
+      existingSecret: postgres-ruby-creds
+      secretKeys:
+        userPasswordKey: Postgres_Password
+        adminPasswordKey: Postgres_Password
+
+#-----------------
+# Secrets
+#-----------------
+secrets_list:
+  - name: postgres-ruby-creds

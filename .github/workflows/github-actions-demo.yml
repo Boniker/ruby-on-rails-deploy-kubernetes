@@ -30,41 +30,10 @@ jobs:
           rubocop --parallel
 
       - name: Run security checks
+        working-directory: ./application
         run: |
           bundler-audit --update
           brakeman -q -w2
-
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:11
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: postgres
-          POSTGRES_PASSWORD: "postgres"
-        ports: ["5432:5432"]
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Setup Ruby and install gems
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-
-      - name: Setup test database
-        env:
-          RAILS_ENV: test
-          PGHOST: localhost
-          PGUSER: myapp
-        run: |
-          bin/rails db:setup
-
-      - name: Run tests
-        run: bin/rspec
 
   push_to_registry:
     name: Push Docker image to Docker Hub
