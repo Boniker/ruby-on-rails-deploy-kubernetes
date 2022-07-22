@@ -5,7 +5,6 @@ jobs:
   linters:
     name: Linters
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -23,19 +22,19 @@ jobs:
 
       - name: Install packages
         run: |
-          gem install rubocop
-          ls
           cd ./application
+          gem install rubocop
           bundle install
 
       - name: Run linters
+        if: always()
         run: |
           rubocop --parallel
 
       - name: Run security checks
         run: |
-          bin/bundler-audit --update
-          bin/brakeman -q -w2
+          bundler-audit --update
+          brakeman -q -w2
 
   tests:
     name: Tests
