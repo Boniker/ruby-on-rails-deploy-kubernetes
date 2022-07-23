@@ -1,0 +1,74 @@
+name: Verify
+on: [push]
+
+jobs:
+  linters:
+    name: Linters Ruby App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby and install gems
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          bundler-cache: true
+
+      - name: Install packages
+        working-directory: ./application
+        run: |
+          gem install bundler -v 1.17.2
+          bundle install
+
+      - name: Run linters
+        continue-on-error: true
+        run: |
+          rubocop --parallel
+
+      - name: Run security checks
+        working-directory: ./application
+        run: |
+          bundler-audit --update
+          brakeman -q -w2
+
+  push_to_registry:
+    name: Push Docker image
+    runs-on: ubuntu-latest
+    needs:  [linters]
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ secrets.DOCKER_USERNAME }}/ruby-on-rails
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: ./application
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  trigger_jenkins:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs:  [push_to_registry]
+    steps:
+    - name: trigger single Job
+      uses: appleboy/jenkins-action@master
+      with:
+        url: "http://a53a9930b828e40e59206da7b76ade5d-1402368957.eu-central-1.elb.amazonaws.com/"
+        user: "user"
+        token: ${{ secrets.JENKINS_TOKEN }}
+        job: "deploy-k8s-ruby-on-rails"

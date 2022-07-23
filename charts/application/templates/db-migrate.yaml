@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: railapp-api-migrate
+  labels:
+    app: railsapp
+spec:
+  template:
+    metadata:
+      labels:
+        app: railsapp
+    spec:
+      containers:
+      - command:
+        - rails
+        - db:migrate
+        envFrom:
+        - configMapRef:
+            name: rails-api
+        image: bbilkevych/ruby-on-rails:feature-add-ci #docker.io/geshan/band-api:latest
+        imagePullPolicy: Always
+        name: main
+      restartPolicy: Never

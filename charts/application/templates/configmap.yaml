@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rails-api
+data:
+  PORT: "3000"
+  # RACK_ENV: production
+  # RAILS_ENV: production
+  # RAILS_LOG_TO_STDOUT: "true"
+  # RAILS_SERVE_STATIC_FILES: "true"
+  DATABASE_NAME: "postgres"
+  DATABASE_USER: "postgres"
+  DATABASE_PASSWORD: "Eeelh1v7SEFDAXhaXsMr"
+  DATABASE_HOST: "postgres-postgresql.database.svc."
+  DATABASE_PORT: "5432"
