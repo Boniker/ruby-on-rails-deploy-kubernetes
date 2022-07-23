@@ -10,6 +10,6 @@ data:
   # RAILS_SERVE_STATIC_FILES: "true"
   DATABASE_NAME: "postgres"
   DATABASE_USER: "postgres"
-  DATABASE_PASSWORD: "postgres"
-  DATABASE_HOST: "postgres-postgresql.ruby.svc.cluster.local"
+  DATABASE_PASSWORD: "Eeelh1v7SEFDAXhaXsMr"
+  DATABASE_HOST: "postgres-postgresql.database.svc."
   DATABASE_PORT: "5432"

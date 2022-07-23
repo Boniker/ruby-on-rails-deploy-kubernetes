@@ -18,6 +18,7 @@ jobs:
       - name: Install packages
         working-directory: ./application
         run: |
+          gem install bundler -v 1.17.2
           bundle install
 
       - name: Run linters
