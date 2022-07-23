@@ -95,3 +95,10 @@ Processing by Rails::WelcomeController#index as HTML
 Completed 200 OK in 206ms (Views: 6.1ms)
 
 
+DEPRECATION WARNING: Single arity template handlers are deprecated. Template handlers must
+now accept two parameters, the view object and the source for the view object.
+Change:
+  >> Coffee::Rails::TemplateHandler.call(template)
+To:
+  >> Coffee::Rails::TemplateHandler.call(template, source)
+ (called from <top (required)> at /Users/a0101/Documents/KUDO/Test/ruby-on-rails-deploy-kubernetes/application/config/environment.rb:5)
