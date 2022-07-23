@@ -5,7 +5,6 @@ WORKDIR /myapp
 
 RUN gem install bundler -v 1.16.1
 ADD Gemfile /myapp/Gemfile
-ADD Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
 ADD . /myapp
 RUN bundle config set --local path 'vendor/cache'
