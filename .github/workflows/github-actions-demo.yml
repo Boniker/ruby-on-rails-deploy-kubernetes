@@ -71,4 +71,4 @@ jobs:
         url: "http://a53a9930b828e40e59206da7b76ade5d-1402368957.eu-central-1.elb.amazonaws.com/"
         user: "user"
         token: ${{ secrets.JENKINS_TOKEN }}
-        job: "deploy-ruby-on-rails"
+        job: "deploy-k8s-ruby-on-rails"
