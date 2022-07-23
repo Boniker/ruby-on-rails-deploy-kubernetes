@@ -11,7 +11,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git 'https://github.com/Boniker/ruby-on-rails-deploy-kubernetes.git'
+        git 'https://github.com/Boniker/ruby-on-rails-deploy-kubernetes/tree/feature/add-ci'
       }
     }
 
