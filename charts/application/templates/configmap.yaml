@@ -11,5 +11,5 @@ data:
   DATABASE_NAME: "postgres"
   DATABASE_USER: "postgres"
   DATABASE_PASSWORD: "Eeelh1v7SEFDAXhaXsMr"
-  DATABASE_HOST: "postgres-postgresql.database.svc."
+  DATABASE_HOST: "postgres-postgresql.database.svc.cluster.local"
   DATABASE_PORT: "5432"

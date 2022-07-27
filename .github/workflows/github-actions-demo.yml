@@ -30,6 +30,7 @@ jobs:
         working-directory: ./application
         run: |
           bundler-audit --update
+          bundle config set --local path 'vendor/cache'
           brakeman -q -w2
 
   push_to_registry:
