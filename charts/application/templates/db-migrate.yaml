@@ -17,7 +17,7 @@ spec:
         envFrom:
         - configMapRef:
             name: rails-api
-        image: bbilkevych/ruby-on-rails:main #docker.io/geshan/band-api:latest
+        image: bbilkevych/ruby-on-rails:feature-add-ci #docker.io/geshan/band-api:latest
         imagePullPolicy: Always
         name: main
       restartPolicy: Never
