@@ -2,7 +2,8 @@ version: "3.9"
 services:
   web:
     build: .
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # command: bash -c "rm -f tmp/pids/server.pid"
     volumes:
       - .:/myapp
     ports:
@@ -12,5 +13,5 @@ services:
       - DATABASE_NAME=postgres
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_HOST=postgres-postgresql.ruby.svc.cluster.local
+      - DATABASE_HOST=postgres-postgresql.database.svc
       - DATABASE_PORT=5432

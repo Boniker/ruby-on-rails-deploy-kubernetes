@@ -3,11 +3,10 @@ RUN apt-get update -qq && apt-get install -y postgresql-client && apt install -y
 WORKDIR /myapp
 # ENV RAILS_ENV=production
 
-RUN gem install bundler -v 1.16.1
 ADD Gemfile /myapp/Gemfile
+RUN gem install bundler -v 1.16.1
 RUN bundle install
 ADD . /myapp
-RUN bundle config set --local path 'vendor/cache'
 
 # Add a script to be executed every time the container starts.
 COPY entrypoint.sh /usr/bin/
