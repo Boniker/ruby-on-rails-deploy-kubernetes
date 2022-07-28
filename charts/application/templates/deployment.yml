@@ -1,27 +1,74 @@
+{{- $values := .Values -}}
+{{- $chart := .Chart -}}
+{{- range .Values.deployments }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: railsapp-deployment
-  namespace: ruby
+  name: {{ .name }}
+  labels:
+    {{- toYaml .labels | nindent 4 }}
 spec:
-  replicas: 3
+  {{- if not $values.autoscaling.enabled | default "false" }}
+  replicas: {{ .replicaCount | default 1 }}
+  {{- end }}
   selector:
     matchLabels:
-      app: railsapp
+      {{- toYaml .labels | nindent 6 }}
+  strategy:
+    type: {{ .type | default "RollingUpdate" }}
+    {{- toYaml .strategy | nindent 4 }}
   template:
     metadata:
+      {{- with .podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app: railsapp
+        {{- toYaml .labels | nindent 8 }}
     spec:
+      {{- with .imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ .serviceAccountName | default "default" }}
       containers:
-      - name: railsapp
-        image: bbilkevych/ruby-on-rails:feature-add-ci
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
-        env:
-          - name: PORT
-            value: "3000"
-        envFrom:
-          - configMapRef:
-              name: rails-api
+        - name: {{ .name }}
+          env:
+            {{- range .env }}
+            - name: {{ .name }}
+              {{- if .value }}
+              value: {{ .value }}
+              {{- else }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .secretName }}
+                  key: {{ .key }}
+              {{- end }}
+            {{- end }}
+          envFrom:
+          {{- range .envFrom }}
+            - configMapRef:
+                name: {{ .name }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .securityContext | nindent 12 }}
+          image: "{{ $values.image.repository }}:{{ $values.image.tag | default $chart.AppVersion }}"
+          imagePullPolicy: {{ $values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .service.targetPort }}
+              protocol: TCP
+          {{- if .livenessProbe }}
+          livenessProbe:
+            {{- toYaml .livenessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .readinessProbe }}
+          readinessProbe:
+            {{- toYaml .readinessProbe | nindent 12 }}
+          {{- end }}
+          {{- if .resources }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          {{- end }}
+---
+{{- end }}

@@ -1,23 +1,41 @@
+{{- $values := .Values -}}
+{{- $chart := .Chart -}}
+{{- range .Values.jobs }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: railapp-api-migrate
+  name: {{ .name }}
   labels:
-    app: railsapp
+    {{- toYaml .labels | nindent 4 }}
 spec:
   template:
     metadata:
       labels:
-        app: railsapp
+        {{- toYaml .labels | nindent 8 }}
     spec:
       containers:
       - command:
-        - rails
-        - db:migrate
+        {{- toYaml .command | nindent 8 }}
+        env:
+        {{- range .env }}
+          - name: {{ .name }}
+            {{- if .value }}
+            value: {{ .value }}
+            {{- else }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .secretName }}
+                key: {{ .key }}
+            {{- end }}
+          {{- end }}
         envFrom:
-        - configMapRef:
-            name: rails-api
-        image: bbilkevych/ruby-on-rails:feature-add-ci #docker.io/geshan/band-api:latest
-        imagePullPolicy: Always
-        name: main
-      restartPolicy: Never
+          {{- range .envFrom }}
+          - configMapRef:
+              name: {{ .name }}
+          {{- end }}
+        image: "{{ $values.image.repository }}:{{ $values.image.tag | default $chart.AppVersion }}"
+        imagePullPolicy: {{ $values.image.pullPolicy }}
+        name: {{ .commandName }}
+      restartPolicy: {{ .restartPolicy | default "Always" }}
+---
+{{- end }}
