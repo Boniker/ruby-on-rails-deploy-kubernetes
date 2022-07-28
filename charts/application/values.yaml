@@ -117,36 +117,3 @@ configmap:
       DATABASE_USER: "postgres"
       DATABASE_HOST: "postgres-postgresql.database.svc.cluster.local"
       DATABASE_PORT: "5432"
-
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: railsapp-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: railsapp
-  template:
-    metadata:
-      labels:
-        app: railsapp
-    spec:
-      containers:
-      - name: railsapp
-        image: bbilkevych/ruby-on-rails:feature-add-ci
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
-        env:
-          - name: PORT
-            value: "3000"
-          - name: DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: "postgres-ruby-creds"
-                key: "Postgres_Password"
-        envFrom:
-          - configMapRef:
-              name: rails-api
